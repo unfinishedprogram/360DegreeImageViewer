@@ -1,0 +1,14 @@
+body { 
+    margin: 0; 
+    overflow: hidden;
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+}
+#filecontainer{
+    margin-top: 500px;
+    width: 200px;
+    height: 150px;
+    background-color: green;
+}
