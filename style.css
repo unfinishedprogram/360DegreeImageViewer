@@ -6,9 +6,11 @@ body {
     align-items: center;
     justify-content: center;
 }
-#filecontainer{
+#filecontainer input{
     margin-top: 500px;
     width: 200px;
     height: 150px;
-    background-color: green;
+    background-color: lightgray;
+    border-radius: 25px;
+    padding: 2
 }
