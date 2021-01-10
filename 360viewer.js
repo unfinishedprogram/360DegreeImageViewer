@@ -1,3 +1,6 @@
+
+
+
 let imageIndex = 0;
             var loadedImages = []
             var loadedMats = []
@@ -8,8 +11,6 @@ let imageIndex = 0;
                 function readFile(index){
                     var reader = new FileReader();
                     if(index >= images.length-1){return;}
-
-                    var file = images[index];
 
                     reader.onload = function(e){
                         texture = THREE.ImageUtils.loadTexture(e.target.result); //Loading the texture
@@ -23,6 +24,15 @@ let imageIndex = 0;
                 readFile(0);
                 main();
             }
+
+            function openPanoFile(imgFile){
+                THREE.ImageUtils.loadTexture(e.target.result)
+                texture = THREE.ImageUtils.loadTexture(e.target.result); //Loading the texture
+                texture.wrapS = THREE.RepeatWrapping; 
+                texture.repeat.x = -1; //Mirroring to correct
+                loadedMats.push(new THREE.MeshBasicMaterial( { color: 0xffffff, map: texture, side: THREE.DoubleSide} )); //Adding texture to the precompiled materials
+            }
+
             function main(){
                 var mouse = new THREE.Vector2();
                 var oldMouse = new THREE.Vector2();
