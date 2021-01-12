@@ -13,7 +13,6 @@ print('connecting to {} port {}'.format(*server_address))
 sock.connect(server_address)
 
 try:
-
     # Send data
     message = b'This is the message.  It will be repeated.'
     print('sending {!r}'.format(message))
