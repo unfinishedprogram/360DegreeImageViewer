@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Image importing</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div id="leftUI">
+        <label id="image_upload_button" for="import_panoramas">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-upload" width="80" height="80"
+                viewBox="0 0 24 24" stroke-width="1.5" stroke="#000000" fill="none" stroke-linecap="round"
+                stroke-linejoin="round">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2" />
+                <polyline points="7 9 12 4 17 9" />
+                <line x1="12" y1="4" x2="12" y2="16" />
+            </svg>
+            <label id="upload_images_label" for="import_panoramas">Upload Images</label>
+            <input type="file" id="import_panoramas" name="import_panoramas" accept="image/png, image/jpeg" multiple
+                onchange="create_pano_group(load_files('import_panoramas'))">
+        </label>
+        <div id="image_container">
+            <div id="uploaded_images_container">
+
+            </div>
+        </div>
+
+    </div>
+
+    <div id="rendererContainer">
+
+    </div>
+
+</body>
+<script src="../scripts/three.js"></script>
+<script src="../scripts/viewer.js"></script>
+<script src="../scripts/load_files.js"></script>
+<script src="../scripts/pano_group.js"></script>
+<script>
+    viewerInstance = new panoViewerInstance("rendererContainer");
+
+    create_pano_group = function(image_files){
+        var group = new pano_group();
+        for(let i = 0; i < image_files.length; i++){
+            group.add_pano(panorama(image_files[i]));
+        }
+        
+        group.load_materials();
+        viewerInstance.pano_group = group;
+        return group;
+    }
+
+    
+</script>
+
+</html>
