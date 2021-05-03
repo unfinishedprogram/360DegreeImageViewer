@@ -20,7 +20,7 @@
             </svg>
             <label id="upload_images_label" for="import_panoramas">Upload Images</label>
             <input type="file" id="import_panoramas" name="import_panoramas" accept="image/png, image/jpeg" multiple
-                onchange="create_pano_group(load_files('import_panoramas'))">
+                onchange="openFiles()">
         </label>
         <div id="image_container">
             <div id="uploaded_images_container">
@@ -31,7 +31,7 @@
     </div>
 
     <div id="rendererContainer">
-
+        
     </div>
 
 </body>
@@ -39,21 +39,22 @@
 <script src="../scripts/viewer.js"></script>
 <script src="../scripts/load_files.js"></script>
 <script src="../scripts/pano_group.js"></script>
+<script src="../scripts/360viewer.js"></script>
 <script>
-    viewerInstance = new panoViewerInstance("rendererContainer");
 
-    create_pano_group = function(image_files){
-        var group = new pano_group();
-        for(let i = 0; i < image_files.length; i++){
-            group.add_pano(panorama(image_files[i]));
-        }
+    //
+    //create_pano_group = function(image_files){
+        //var group = new pano_group();
+        //for(let i = 0; i < image_files.length; i++){
+            //group.add_pano(panorama(image_files[i]));
+        //}
         
-        group.load_materials();
-        viewerInstance.pano_group = group;
-        return group;
-    }
+        //group.load_materials();
+        //viewerInstance = new panoViewerInstance("rendererContainer");
+        //viewerInstance.pano_group = group;
+        //return group;
+    //}
 
-    
 </script>
 
 </html>

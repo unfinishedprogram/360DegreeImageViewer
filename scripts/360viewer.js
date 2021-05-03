@@ -5,8 +5,8 @@ var panoMat
 var running = false;
 var panosphere;
 function openFiles() {
-    var images = document.getElementById('fileExplorer').files;
-    document.getElementById('fileExplorer').style.display = "none";
+    var images = document.getElementById('import_panoramas').files;
+    document.getElementById('import_panoramas').style.display = "none";
     function readFile(index) {
         var reader = new FileReader();
         if (index >= images.length - 1) { return; }

@@ -1,6 +1,7 @@
 function panoViewerInstance(parent_element) {
     this.panoramas = []
     this.renderer = new THREE.WebGLRenderer();
+    console.log(this.renderer);
     this.mouse = new THREE.Vector2();
     this.mouseBool = false;
     this.oldMouse = new THREE.Vector2();
@@ -10,7 +11,7 @@ function panoViewerInstance(parent_element) {
     this.scene = new THREE.Scene();
     this.camera = new THREE.PerspectiveCamera(90, rendererContainer.clientWidth / rendererContainer.clientHeight, 0.1, 1000);
     this.raycaster = new THREE.Raycaster();
-
+    
 
     this.createPanoMat = function(image){
         texture = THREE.ImageUtils.loadTexture(image); //Loading the texture
@@ -24,34 +25,44 @@ function panoViewerInstance(parent_element) {
         this.renderer.domElement.addEventListener('mousemove', this.mouseMove);
         this.renderer.domElement.addEventListener('mousedown', this.mouseDown);
         this.renderer.domElement.addEventListener('mouseup', this.mouseUp);
-        this.renderer.domElement.addEventListener('click', this.moveSphere);
 
         this.renderer.setSize(this.renderer_container.clientWidth, this.renderer_container.clientHeight);
         this.renderer_container.appendChild(this.renderer.domElement);
 
         var sphere_geo = new THREE.SphereBufferGeometry(1, 64, 32);
 
-        panoMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
-        panosphere = new THREE.Mesh(sphere_geo, panoMat);
-        panosphere.name = "panosphere";
+        this.panoMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
+        this.panosphere = new THREE.Mesh(sphere_geo, this.panoMat);
+        this.panosphere.name = "panosphere";
         //var panoDot = new THREE.Mesh(dot, defMat);
 
-        scene.add(panosphere);
+        this.scene.add(this.panosphere);
+
+        animate();
         //scene.add(panoDot);
+    }
+   
+
+    this.getCanvasRelativePosition = function(e) {
+        var canvas = this.renderer.domElement;
+        const rect = canvas.getBoundingClientRect();
+        return {
+            x: (e.clientX - rect.left) * canvas.width / rect.width,
+            y: (e.clientY - rect.top) * canvas.height / rect.height,
+        };
     }
 
     this.mouseMove = function(e) {
-        oldMouse.copy(mouse);
-        mouse = getCanvasRelativePosition(e);
-        if (mouseBool && oldMouse.x && mouse.x && oldMouse.y && mouse.y) {
-            camera.rotation.order = 'YXZ';
-            camera.rotateY((oldMouse.x - mouse.x) / 360);
-            camera.rotateX((oldMouse.y - mouse.y) / 360);
-            camera.rotation.z = 0;
+        this.mouse = this.getCanvasRelativePosition(e);
+        this.oldMouse.copy(this.mouse);
+        if (mouseBool && this.oldMouse.x && mouse.x && this.oldMouse.y && mouse.y) {
+            this.camera.rotation.order = 'YXZ';
+            this.camera.rotateY((this.oldMouse.x - mouse.x) / 360);
+            this.camera.rotateX((this.oldMouse.y - mouse.y) / 360);
+            this.camera.rotation.z = 0;
 
-
-            oldMouse.x = mouse.x
-            oldMouse.y = mouse.y
+            this.oldMouse.x = this.mouse.x
+            this.oldMouse.y = this.mouse.y
         }
 
         if (camera.rotation.y > 360) {
@@ -66,23 +77,16 @@ function panoViewerInstance(parent_element) {
         }
     }
 
-    this.getCanvasRelativePosition = function(e) {
-        var canvas = renderer.domElement;
-        const rect = canvas.getBoundingClientRect();
-        return {
-            x: (e.clientX - rect.left) * canvas.width / rect.width,
-            y: (e.clientY - rect.top) * canvas.height / rect.height,
-        };
-    }
+    
 
     this.setPickPosition = function(e) {
         const pos = getCanvasRelativePosition(e);
-        pickPosition.x = (pos.x / renderer.domElement.width) * 2 - 1;
-        pickPosition.y = (pos.y / renderer.domElement.height) * -2 + 1;  // note we flip Y
+        pickPosition.x = (pos.x / this.renderer.domElement.width) * 2 - 1;
+        pickPosition.y = (pos.y / this.renderer.domElement.height) * -2 + 1;  // note we flip Y
     }
 
     this.moveSphere = function(e) {
-        setPickPosition(e);
+        this.setPickPosition(e);
 
         this.raycaster.setFromCamera(pickPosition, camera);
         this.panoDot.position.copy(raycaster.ray.direction);
@@ -98,7 +102,7 @@ function panoViewerInstance(parent_element) {
 
     this.resizeWindow = function() {
         this.renderer.setSize(this.rendererContainer.clientWidth, this.rendererContainer.clientHeight);
-        this.camera.aspect = rendererContainer.clientWidth / rendererContainer.clientHeight;
+        this.camera.aspect = this.rendererContainer.clientWidth / this.rendererContainer.clientHeight;
         this.camera.updateProjectionMatrix();
     }
 
@@ -121,6 +125,6 @@ function panoViewerInstance(parent_element) {
         requestAnimationFrame(animate);
         this.renderer.render(this.scene, this.camera);
     }
-    animate();
+    this.initalize();
 }
 
